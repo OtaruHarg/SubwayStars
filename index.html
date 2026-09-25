@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>SubwayStars</title>
+        <style>
+            body{
+                padding: 0;
+                margin: 0;
+                height: 2160px;
+                width: 1080px;
+            }
+            .field{
+                display: flex;
+                justify-content: center;
+            }
+            .eki_eria{
+                position: fixed;
+                top: 300px;
+                left: 7px;
+            }
+            .bottom_button{
+                position: fixed;
+                bottom: 100px;
+                left: 290px;
+            }
+            #click_button_1{
+                position: fixed;
+                left: 440px;
+                bottom: 500px;
+                height: 100px;
+                width: 100px;
+                border-style: solid;
+                border-color: deeppink;
+                border-width: 50px;
+                border-radius: 50%;
+            }
+            #click_button_2{
+                position: fixed;
+                left: 200px;
+                bottom: 300px;
+                height: 100px;
+                width: 100px;
+                border-style: solid;
+                border-color: deeppink;
+                border-width: 50px;
+                border-radius: 50%;
+            }
+            #click_button_3{
+                position: fixed;
+                left: 680px;
+                bottom: 300px;
+                height: 100px;
+                width: 100px;
+                border-style: solid;
+                border-color: deeppink;
+                border-width: 50px;
+                border-radius: 50%;
+            }
+            #click_button_4{
+                position: fixed;
+                left: 300px;
+                bottom: 20px;
+                height: 100px;
+                width: 100px;
+                border-style: solid;
+                border-color: deeppink;
+                border-width: 50px;
+                border-radius: 50%;
+            }
+            #click_button_5{
+                position: fixed;
+                left: 580px;
+                bottom: 20px;
+                height: 100px;
+                width: 100px;
+                border-style: solid;
+                border-color: deeppink;
+                border-width: 50px;
+                border-radius: 50%;
+            }
+            .top_eria{
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 20vw;
+                width: 100vw;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: darkgray;
+                font-size: 10vw;
+            }
+            .dice{
+                position: fixed;
+                left: auto;
+                right: 5vw;
+                top: 25vw;
+                height: 18vw;
+                width: 18vw;
+                background-color: whitesmoke;
+                border-style: solid;
+                border-width: 1vw;
+                text-align: center;
+            }
+            .backgrounds{
+                position: absolute;
+                width: 1080px;
+                height: 2160px;
+                top: 0;
+                left: 0;
+            }
+            .serihu_box{
+                position: absolute;
+                width: 1000px;
+                height: 420px;
+                border-color: forestgreen;
+                border-style: solid;
+                border-width: 40px;
+                top:  auto;
+                left: 0;
+                bottom: 0;
+            }
+            .serihu_name{
+                position: absolute;
+                width: 300px;
+                height: 100px;
+                border-color: forestgreen;
+                border-style: solid;
+                border-width: 40px;
+                top:  auto;
+                left: 40px;
+                bottom: 380px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="backgrounds" id="backgrounds" style="opacity: 0; z-index: -1; background-color: whitesmoke;"></div>
+        <div class="serihu_name" id="serihu_name" style="opacity: 0; z-index: -1; background-color: whitesmoke;">
+            <span id="serihu_name_1" style="font-size: 60px;">アンカー</span>
+        </div>
+        <div class="serihu_box" id="serihu_box" style="opacity: 0; z-index: -1; background-color: whitesmoke;">
+            <span id="serihu_1"></span><br>
+            <span id="serihu_2"></span><br>
+            <span id="serihu_3"></span>
+        </div>
+        <div class="top_eria">
+            <span id="now_eria"></span>
+        </div>
+        <div class="bottom_button">
+            <img src="stars_button.png" width="500px" height="500px">
+        </div>
+        <div class="dice" onclick="dices()">
+            <span id="deme_1" style="font-size: 7vw;">Ⅹ</span><br>
+            <span id="deme_2" style="font-size: 5vw;">駅進む</span>
+        </div>
+        <div id="click_button_1" onclick="clicks(1)" style="opacity: 1;"></div>
+        <div id="click_button_2" onclick="clicks(2)" style="opacity: 1;"></div>
+        <div id="click_button_3" onclick="clicks(3)" style="opacity: 1;"></div>
+        <div id="click_button_4" onclick="clicks(4)" style="opacity: 1;"></div>
+        <div id="click_button_5" onclick="clicks(5)" style="opacity: 1;"></div>
+        <script>
+            var ready = [null,1,1,1,1,1];
+            var eki = [null,
+                "高畑","八田","岩塚","中村公園","中村日赤","本陣","亀島","名古屋","伏見","栄",
+                "新栄町","千種","今池","池下","覚王山","本山","東山公園","星ヶ丘","一社","上社",
+                "本郷","藤が丘","金山","東別院","上前津","矢場町","久屋大通","名古屋城","名城公園","黒川",
+                "志賀本通","平安通","大曽根","ナゴヤドーム前矢田","砂田橋","茶屋ヶ坂","自由が丘","名古屋大学","八事日赤","八事",
+                "総合リハビリセンター","瑞穂運動場東","新瑞橋","妙音通","堀田","熱田神宮伝馬町","熱田神宮西","西高蔵","日比野","六番町",
+                "東海通","港区役所","築地口","名古屋港","上小田井","庄内緑地公園","庄内通","浄心","浅間町","丸の内",
+                "大須観音","鶴舞","荒畑","御器所","川名","いりなか","塩釜口","植田","原","平針",
+                "赤池","上飯田","太閤通","国際センター","高岳","車道","吹上","桜山","瑞穂区役所","瑞穂運動場西",
+                "桜本町","鶴里","野並","鳴子北","相生山","神沢","徳重","柳橋"
+            ];
+            var place_here;
+            var eki_eria_x = [null,
+                136.853465,136.853299,136.854372,136.854930,136.862440,136.867375,136.877418,136.881237,136.897459,136.908703,
+                136.920118,136.929946,136.938143,136.946039,136.952777,136.963592,136.972647,136.985736,136.996078,137.006636,
+                137.013330,137.021613,136.900999,136.904712,136.906815,136.908703,136.907716,136.902394,136.901450,136.910205,
+                136.921222,136.929903,136.937585,136.943851,136.954494,136.962562,136.966724,136.966639,136.964707,136.964235,
+                136.955051,136.948829,136.937284,136.929774,136.921492,136.910462,136.906815,136.901708,136.893125,136.888458,
+                136.886086,136.881323,136.880465,136.881838,136.876912,136.882095,136.891022,136.890850,136.890292,136.898746,
+                136.894841,136.915269,136.925311,136.934023,136.948314,136.954579,136.978655,136.988659,136.997108,137.007408,
+                137.018180,136.929762,136.873368,136.889054,136.916256,136.929560,136.935439,136.933293,136.934409,136.935439,
+                136.936855,136.944194,136.954966,136.966124,136.976295,136.989255,136.997581,136.889591//柳橋駅は柳橋郵便局を参照
+            ];
+            var eki_eria_y = [null,
+                35.139089,35.148109,35.158214,35.167722,35.172773,35.177053,35.177579,35.170984,35.168950,35.169721,
+                35.170669,35.170704,35.169757,35.169511,35.166529,35.165582,35.160635,35.165020,35.168213,35.173510,
+                35.177053,35.182560,35.144468,35.149618,35.157232,35.163301,35.173686,35.181508,35.190697,35.197150,
+                35.196169,35.196133,35.191679,35.196379,35.188628,35.184805,35.175194,35.154425,35.144950,35.136739,
+                35.130737,35.123155,35.117750,35.117153,35.116486,35.120804,35.127859,35.134843,35.132808,35.124083,
+                35.113467,35.106586,35.100021,35.093068,35.223831,35.214928,35.203743,35.192065,35.183262,35.173054,
+                35.161407,35.156144,35.151267,35.149442,35.148670,35.143933,35.132492,35.130121,35.126069,35.122594,
+                35.121049,35.203824,35.167637,35.175925,35.175825,35.173440,35.158775,35.139897,35.132106,35.125086,
+                35.109254,35.105533,35.102689,35.102689,35.102513,35.098511,35.094964,35.172586//柳橋駅は柳橋郵便局を参照
+            ];
+            var eki_fin = [null,
+                "faise","faise","faise","faise","faise","faise","faise","faise","faise","faise",
+                "faise","faise","faise","faise","faise","faise","faise","faise","faise","faise",
+                "faise","faise","faise","faise","faise","faise","faise","faise","faise","faise",
+                "faise","faise","faise","faise","faise","faise","faise","faise","faise","faise",
+                "faise","faise","faise","faise","faise","faise","faise","faise","faise","faise",
+                "faise","faise","faise","faise","faise","faise","faise","faise","faise","faise",
+                "faise","faise","faise","faise","faise","faise","faise","faise","faise","faise",
+                "faise","faise","faise","faise","faise","faise","faise","faise","faise","faise",
+                "faise","faise","faise","faise","faise","faise","faise","faise"
+            ];
+            var karis;
+            var kyori;
+            var zahyou = 0;
+            var moyori = 0;
+            var moyori_eki = 0;
+            var kazu = [null,"Ⅰ","Ⅱ","Ⅲ","Ⅳ","Ⅴ","Ⅵ","Ⅶ","Ⅷ","Ⅸ","Ⅹ"];
+            var kuuten;
+            var kaisuu_e;
+            var event_serihu = [
+                null,
+                [["高畑駅へようこそ！"],],//高畑駅
+                [[""]],//八田駅
+                [[""]],//岩塚駅
+                [[""]],//中村公園駅
+                [[""]],//中村日赤駅
+                [[""]],//本陣駅
+                [[""]],//亀山駅
+                [[""]],//名古屋駅
+                [["「伏見駅にようこそ。"],["俺に何か用かな？」"],["カードを見せると、彼はすぐに状況を察する"],["「ワズン……やはり一人で無理していたか。」"]],//伏見駅
+                [[""]],//栄駅
+                [[""]],//新栄町駅
+                [[""]],//千種駅
+                [[""]],//今池駅
+                [[""]],//池下駅
+                [[""]],//覚王山駅
+                [[""]],//本山駅
+                [[""]],//東山公園駅
+                [[""]],//星ヶ丘駅
+                [[""]],//一社駅
+                [[""]],//上社駅
+                [[""]],//本郷駅
+                [[""]],//藤が丘駅
+                [[""]],//金山駅
+                [[""]],//東別院駅
+                [[""]],//上前津駅
+                [[""]],//矢場町駅
+                [[""]],//久屋大通駅
+                [[""]],//名古屋城駅
+                [[""]],//名城公園駅
+                [[""]],//黒川駅
+                [[""]],//志賀本通駅
+                [[""]],//平安通駅
+                [[""]],//大曽根駅
+                [[""]],//ナゴヤドーム前矢田駅
+                [[""]],//砂田橋駅
+                [[""]],//茶屋ヶ坂駅
+                [[""]],//自由ヶ丘駅
+                [[""]],//名古屋大学駅
+                [[""]],//八事日赤駅
+                [[""]],//八事駅
+                [[""]],//総合リハビリセンター駅
+                [[""]],//瑞穂運動場東駅
+                [[""]],//新瑞橋駅
+                [[""]],//妙音通駅
+                [[""]],//堀田駅
+                [[""]],//熱田神宮伝馬町駅
+                [[""]],//熱田神宮西駅
+                [[""]],//西高蔵駅
+                [["「こんにちは。"],[""]],//日比野駅
+                [[""]],//六番町駅
+                [[""]],//東海通駅
+                [[""]],//港区役所駅
+                [[""]],//築地口駅
+                [[""]],//名古屋港駅
+                [[""]],//上小田井駅
+                [[""]],//庄内緑地公園駅
+                [[""]],//庄内通駅
+                [[""]],//浅間町駅
+                [[""]],//丸の内駅
+                [[""]],//大須観音駅
+                [[""]],//鶴舞駅
+                [[""]],//荒畑駅
+                [[""]],//御器所駅
+                [[""]],//川名駅
+                [[""]],//いりなか駅
+                [[""]],//塩釜口駅
+                [[""]],//植田駅
+                [[""]],//原駅
+                [[""]],//平針駅
+                [[""]],//赤池駅
+                [[""]],//上飯田駅
+                [[""]],//太閤通駅
+                [[""]],//国際センター駅
+                [[""]],//高岳駅
+                [[""]],//車道駅
+                [[""]],//吹上駅
+                [[""]],//桜山駅
+                [[""]],//瑞穂区役所駅
+                [[""]],//瑞穂運動場西駅
+                [[""]],//桜本町駅
+                [[""]],//鶴里駅
+                [[""]],//野並駅
+                [[""]],//鳴子北駅
+                [[""]],//相生山駅
+                [[""]],//神沢駅
+                [[""]],//徳重駅
+                [["そこに着くと、一人の少女が立っていた"],["誰？"]],//柳橋駅
+            ]
+            window.onload = start();
+            function start(){
+                for(let w = 0; w < 89; w++){
+                    karis = window.localStorage.getItem("eki_fin_" + w);
+                    if(karis){
+                        eki_fin[w] = karis;
+                    }
+                }
+            }
+            function saves(){
+                for(let c = 0; c < 89; c++){
+                    window.localStorage.setItem("eki_fin_" + c , eki_fin[c]);
+                }
+            }
+            function clicks(x){
+                document.getElementById("click_button_" + x).style.opacity = 0;
+                ready[1] = document.getElementById("click_button_1").style.opacity;
+                ready[2] = document.getElementById("click_button_2").style.opacity;
+                ready[3] = document.getElementById("click_button_3").style.opacity;
+                ready[4] = document.getElementById("click_button_4").style.opacity;
+                ready[5] = document.getElementById("click_button_5").style.opacity;
+                if(ready[1] == 0 & ready[2] == 0 & ready[3] == 0 & ready[4] == 0 & ready[5] == 0){
+                    eria_check();
+                    document.getElementById("click_button_1").style.opacity = 1;
+                    document.getElementById("click_button_2").style.opacity = 1;
+                    document.getElementById("click_button_3").style.opacity = 1;
+                    document.getElementById("click_button_4").style.opacity = 1;
+                    document.getElementById("click_button_5").style.opacity = 1;
+                }
+            }
+            function eria_check(){
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const eria_x = position.coords.longitude;  // 経度
+                        const eria_y = position.coords.latitude;   // 緯度
+                        eki_check(eria_x,eria_y);
+                    }
+                );
+            }
+            function eki_check(x,y){
+                moyori = 100000000000000;
+                for (let i = 1; i < 89; i++) {
+                    kyori = ((eki_eria_x[i] - x)**2) + ((eki_eria_y[i] - y)**2);
+                    zahyou = Math.sqrt(kyori);
+                    if(moyori > zahyou){
+                        moyori = zahyou;
+                        moyori_eki = eki[i];
+                        moyori_eki_num = i;
+                    }
+                }
+                var result = window.confirm(moyori_eki + "駅を登録しますか？");
+                if(result){
+                    document.getElementById("now_eria").textContent = "現在" + moyori_eki + "駅";
+                    eki_touroku(moyori_eki,moyori_eki_num);
+                }else{
+                    window.alert("キャンセルしました");
+                }
+            }
+            function eki_touroku(x,y){
+                if(eki_fin[y] = "false"){
+                    eki_fin[y] = "true";
+                    events(y);
+                }
+            }
+            async function events(y){
+                const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
+                const boxes = document.getElementById("serihu_box");
+                document.getElementById("backgrounds").style.opacity = 1;
+                document.getElementById("backgrounds").style.zIndex = 100;
+                document.getElementById("serihu_box").style.opacity = 1;
+                document.getElementById("serihu_box").style.zIndex = 200;
+                document.getElementById("serihu_name").style.opacity = 1;
+                document.getElementById("serihu_name").style.zIndex = 300;
+                kuuten = event_serihu[y].length;
+                kaisuu_e = 0;
+                while(kaisuu_e < kuuten){
+                    texton(y,kaisuu_e);
+                    await sleep(event_serihu[y][kaisuu_e] * 20);
+                    await waitForClick(boxes);
+                }
+            }
+            async function texton(moji,nom){
+                karis = document.getElementById("serihu_2").textContent;
+                if(karis){
+                    document.getElementById("serihu_1").textContent = karis;
+                    document.getElementById("serihu_2").textContent = "";
+                }
+                const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
+                const img = document.getElementById("text_box");
+                x = 2;
+                i = 0;
+                while(event_serihu[moji][nom].length > i){
+                    textsuu_1 = document.getElementById("serihu_1").textContent.length;
+                    textsuu_2 = document.getElementById("serihu_2").textContent.length;
+                    if(textsuu_1 == 0){
+                        x = 1;
+                    }
+                    if(textsuu_1 >= 21){
+                        x = 2;
+                    }
+                    document.getElementById("serihu_naiyou_" + x).textContent +=  mojiretu[moji][nom].charAt(i);
+                    if(textsuu_2 >= 21){
+                        karis = document.getElementById("serihu_naiyou_2").textContent;
+                        document.getElementById("serihu_naiyou_1").textContent = karis;
+                        document.getElementById("serihu_naiyou_2").textContent = "";
+                    }
+                    await sleep(20);
+                    i = i + 1;
+                }
+            }
+            async function dices(){
+                const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
+                for(let i = 1; i < 10; i++){
+                    await sleep(100);
+                    deme = Math.floor(Math.random() * 10) + 1;
+                    document.getElementById("deme_1").textContent = kazu[deme];
+                }
+            }
+        </script>
+    </body>
+</html>
