@@ -365,6 +365,8 @@
                         moyori_eki_num = i;
                     }
                 }
+                document.getElementById("backgrounds").style.opacity = 0;
+                document.getElementById("backgrounds").style.zIndex = 0;
                 var result = window.confirm(moyori_eki + "駅を登録しますか？");
                 if(result){
                     document.getElementById("now_eria").textContent = "現在" + moyori_eki + "駅";
