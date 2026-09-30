@@ -346,6 +346,8 @@
                 }
             }
             function eria_check(){
+                document.getElementById("backgrounds").style.opacity = 0.1;
+                document.getElementById("backgrounds").style.zIndex = 1000;
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
                         const eria_x = position.coords.longitude;  // 経度
@@ -366,7 +368,7 @@
                     }
                 }
                 document.getElementById("backgrounds").style.opacity = 0;
-                document.getElementById("backgrounds").style.zIndex = 0;
+                document.getElementById("backgrounds").style.zIndex = -1;
                 var result = window.confirm(moyori_eki + "駅を登録しますか？");
                 if(result){
                     document.getElementById("now_eria").textContent = "現在" + moyori_eki + "駅";
