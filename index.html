@@ -315,6 +315,11 @@
                 [[""]],//徳重駅
                 [["そこに着くと、一人の少女が立っていた"],["誰？"]],//柳橋駅
             ]
+            function waitForClick(element) {
+                return new Promise((resolve) => {
+                    element.addEventListener('click', resolve, { once: true });
+                });
+            }
             window.onload = start();
             function start(){
                 for(let w = 0; w < 89; w++){
